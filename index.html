@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>EduBot taqdimoti</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* Tartib: tor ustun, katta sarlavhalar, har bo'lim bitta fikr; Telegram suhbat namunasi markazda */
+:root{
+  --bg:#f5f6f2; --card:#ffffff; --ink:#15211e; --muted:#58665f; --line:#dde2da;
+  --accent:#0d6b5b; --accent-soft:#e0efe9; --debt:#b4410f; --debt-soft:#f7e6dc;
+  --chat:#e6f0f7; --chat-me:#d8f0c8;
+  --display:"Bricolage Grotesque","Segoe UI",Arial,sans-serif;
+  --body:"Manrope","Segoe UI",Arial,sans-serif;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#101715; --card:#17201d; --ink:#e8efeb; --muted:#9bab9f; --line:#2a3732;
+    --accent:#4fc3a8; --accent-soft:#1a2f29; --debt:#f0875a; --debt-soft:#33211a;
+    --chat:#1b2a34; --chat-me:#27422a; color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#101715; --card:#17201d; --ink:#e8efeb; --muted:#9bab9f; --line:#2a3732;
+  --accent:#4fc3a8; --accent-soft:#1a2f29; --debt:#f0875a; --debt-soft:#33211a;
+  --chat:#1b2a34; --chat-me:#27422a; color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:17px;line-height:1.6}
+.wrap{max-width:920px;margin:0 auto;padding:0 20px}
+header{padding:56px 0 40px;border-bottom:1px solid var(--line)}
+.tag{display:inline-block;font-size:13px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--accent);background:var(--accent-soft);padding:5px 12px;border-radius:99px}
+h1{font-family:var(--display);font-weight:800;font-size:clamp(40px,8vw,72px);line-height:1.02;margin:18px 0 16px;letter-spacing:-.02em;text-wrap:balance}
+.lead{font-size:clamp(19px,2.6vw,23px);max-width:34em;color:var(--ink);margin:0 0 22px}
+.meta{display:flex;flex-wrap:wrap;gap:8px 22px;color:var(--muted);font-size:15px}
+section{padding:48px 0;border-bottom:1px solid var(--line)}
+h2{font-family:var(--display);font-weight:800;font-size:clamp(28px,4.5vw,40px);line-height:1.1;margin:0 0 10px;letter-spacing:-.01em;text-wrap:balance}
+.sub{color:var(--muted);margin:0 0 26px;max-width:40em}
+h3{font-family:var(--display);font-weight:600;font-size:20px;margin:0 0 6px}
+p{margin:0 0 12px}
+.grid{display:grid;gap:14px}
+.g2{grid-template-columns:repeat(2,1fr)}
+.g3{grid-template-columns:repeat(3,1fr)}
+@media(max-width:720px){.g2,.g3{grid-template-columns:1fr}}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px 20px}
+.card p:last-child{margin-bottom:0}
+.card.pain{border-left:5px solid var(--debt)}
+.card.gain{border-left:5px solid var(--accent)}
+.num{font-family:var(--display);font-weight:800;font-size:34px;color:var(--accent);line-height:1}
+.steps{counter-reset:s;display:grid;gap:12px;padding:0;margin:0;list-style:none}
+.steps li{counter-increment:s;display:grid;grid-template-columns:44px 1fr;gap:14px;align-items:start;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 18px}
+.steps li::before{content:counter(s);font-family:var(--display);font-weight:800;font-size:22px;width:40px;height:40px;border-radius:50%;background:var(--accent);color:var(--bg);display:grid;place-items:center}
+.steps b{display:block}
+.demo{display:grid;grid-template-columns:1fr 1fr;gap:26px;align-items:start}
+@media(max-width:720px){.demo{grid-template-columns:1fr}}
+.phone{background:var(--card);border:1px solid var(--line);border-radius:22px;padding:14px;max-width:380px}
+.phone .top{font-weight:700;font-size:14px;color:var(--muted);padding:2px 6px 10px;border-bottom:1px solid var(--line);margin-bottom:12px}
+.msg{padding:9px 13px;border-radius:14px;margin:0 0 9px;max-width:88%;font-size:15px;line-height:1.45}
+.msg.bot{background:var(--chat);border-top-left-radius:4px}
+.msg.me{background:var(--chat-me);margin-left:auto;border-top-right-radius:4px}
+.btns{display:flex;gap:6px;margin:0 0 12px}
+.btns span{flex:1;text-align:center;font-size:14px;font-weight:600;padding:7px 4px;border-radius:9px;background:var(--accent-soft);color:var(--accent)}
+.note{font-size:13px;color:var(--muted);margin-top:6px}
+table{width:100%;border-collapse:collapse;font-size:15px}
+.tw{overflow-x:auto;border:1px solid var(--line);border-radius:14px;background:var(--card)}
+th,td{text-align:left;padding:11px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+tr:last-child td{border-bottom:0}
+th{font-size:13px;text-transform:uppercase;letter-spacing:.04em;color:var(--muted)}
+.pill{display:inline-block;font-size:12px;font-weight:700;padding:3px 10px;border-radius:99px;white-space:nowrap}
+.p-done{background:var(--accent-soft);color:var(--accent)}
+.p-todo{background:var(--debt-soft);color:var(--debt)}
+.p-plan{background:var(--line);color:var(--muted)}
+ul.tick{list-style:none;padding:0;margin:0;display:grid;gap:8px}
+ul.tick li{padding-left:26px;position:relative}
+ul.tick li::before{content:"";position:absolute;left:3px;top:.55em;width:10px;height:10px;border-radius:50%;background:var(--accent)}
+ul.tick.later li::before{background:transparent;border:2px solid var(--muted)}
+.q{counter-reset:q;display:grid;gap:10px;padding:0;margin:0;list-style:none}
+.q li{counter-increment:q;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 18px 14px 56px;position:relative}
+.q li::before{content:counter(q);position:absolute;left:16px;top:12px;font-family:var(--display);font-weight:800;font-size:24px;color:var(--accent)}
+.honest{background:var(--debt-soft);border:1px solid var(--debt);border-radius:14px;padding:16px 20px}
+.honest b{color:var(--debt)}
+footer{padding:32px 0 56px;color:var(--muted);font-size:14px}
+a{color:var(--accent)}
+:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+</style>
+</head>
+<body>
+<header><div class="wrap">
+  <span class="tag">Taqdimot · o'quv markazlar uchun</span>
+  <h1>EduBot</h1>
+  <p class="lead">"Kim qancha to'lagan, kim qarzdor?" degan savolga Telegram ichida bir soniyada javob beradigan kassa-bot. To'lovni yozadi, qarzni o'zi hisoblaydi, ota-onaga o'zi eslatadi.</p>
+  <div class="meta"><span>Holat: reja va hujjatlar tayyor, qurish boshlanadi</span><span>Platforma: Telegram</span><span>Tillar: o'zbek, rus</span></div>
+</div></header>
+
+<main class="wrap">
+
+<section id="muammo">
+  <h2>Muammo: pul aralash yuritiladi</h2>
+  <p class="sub">Kichik o'quv markazda to'lovni ko'pincha egasi yoki bitta admin yig'adi. Hisob esa har joyda.</p>
+  <div class="grid g2">
+    <div class="card pain"><h3>Daftar, Excel, yoki hech narsa</h3><p>Kimdir daftarda yozadi, kimdir Excel'da, ba'zilari umuman yozmaydi. Ma'lumot bir joyda emas.</p></div>
+    <div class="card pain"><h3>Qisman to'lov chalkashadi</h3><p>"300 ming berdi, qolgani keyin" degan gap bir oydan keyin eslanmaydi.</p></div>
+    <div class="card pain"><h3>Qarzdor unutiladi</h3><p>Ota-onaga eslatishni kimdir qo'lda qilishi kerak. Qilinmasa, pul kelmaydi.</p></div>
+    <div class="card pain"><h3>Oy oxirida pul kam chiqadi</h3><p>Sababini topish qiyin: kim to'lamadi, kim to'ladi-yu yozilmadi?</p></div>
+  </div>
+</section>
+
+<section id="yechim">
+  <h2>Yechim: hamma narsa Telegram ichida</h2>
+  <p class="sub">Ega, admin va ota-ona allaqachon Telegram'da. Alohida dastur o'rnatish, o'rganish shart emas.</p>
+  <div class="demo">
+    <div>
+      <ul class="tick">
+        <li><b>To'lovni yozadi.</b> Tugmalar bilan yoki bitta xabar bilan: "Alisher 300000 naqd".</li>
+        <li><b>Qarzni o'zi hisoblaydi.</b> Chegirma, bir necha guruh, oy o'rtasida kelgan o'quvchi, oldindan to'lov hisobga olinadi.</li>
+        <li><b>Hisobni kod qiladi.</b> Raqamni sun'iy intellekt "o'ylab" chiqarmaydi, hisob qoidalari testdan o'tkaziladi.</li>
+        <li><b>Ota-onaga o'zi eslatadi.</b> Egasi sozlagan kunda, takrorlamasdan.</li>
+        <li><b>Har o'zgarish izda qoladi.</b> Admin to'lovni tuzatsa, tarix saqlanadi, egaga xabar boradi.</li>
+      </ul>
+    </div>
+    <div>
+      <div class="phone" role="img" aria-label="Telegram suhbat namunasi: to'lov yozish">
+        <div class="top">EduBot · 💰 Kassa</div>
+        <div class="msg me">Alisher 300000 naqd</div>
+        <div class="msg bot">Alisher Karimov, Ingliz tili (oylik 500 000 so'm).<br>To'lov: 300 000 so'm, naqd. To'g'rimi?</div>
+        <div class="btns"><span>✅ To'g'ri</span><span>✏️ Noto'g'ri</span></div>
+        <div class="msg bot">To'lov yozildi. Qoldi: 200 000 so'm.</div>
+        <div class="msg bot">Ota-onaga eslatma: Farzandingiz uchun 200 000 so'm to'lov muddati 05.11.2026.</div>
+      </div>
+      <p class="note">Namuna: PRD va 1-sprint rejasidagi matnlar asosida. Bot hali qurilmagan.</p>
+    </div>
+  </div>
+</section>
+
+<section id="oqim">
+  <h2>Qanday ishlaydi</h2>
+  <p class="sub">Markaz ulanishidan birinchi eslatmagacha sakkiz qadam.</p>
+  <ol class="steps">
+    <li><div><b>Markaz egasi botga kiradi</b>Markaz nomi, telefon, foydalanish shartlariga rozilik.</div></li>
+    <li><div><b>Tasdiq va 7 kunlik bepul sinov</b>Platforma egasi so'rovni tasdiqlaydi.</div></li>
+    <li><div><b>Sozlash</b>Qarz yoziladigan kun (oyning 1-kuni yoki o'quvchi kelgan sana) va eslatma jadvali; admin qo'shiladi.</div></li>
+    <li><div><b>Guruhlar va o'quvchilar</b>Guruh oylik narxi bilan, o'quvchi telefon raqami bilan, kerak bo'lsa chegirma.</div></li>
+    <li><div><b>Bot oylikni o'zi yozadi</b>Belgilangan kuni har faol o'quvchiga, oy o'rtasida kelganga kunlar bo'yicha.</div></li>
+    <li><div><b>Ota-ona ulanadi</b>Markaz havolasi, "Kontakt yuborish", bot uni telefon bo'yicha farzandiga bog'laydi.</div></li>
+    <li><div><b>Admin to'lovni yozadi</b>"✅ To'g'ri" bilan tasdiqlaydi.</div></li>
+    <li><div><b>Bot eslatadi, ega nazorat qiladi</b>Ota-onaga eslatma; egaga istalgan vaqt qarzdorlar ro'yxati va Excel.</div></li>
+  </ol>
+</section>
+
+<section id="rollar">
+  <h2>Kim nimani ko'radi</h2>
+  <p class="sub">Har markazning ma'lumoti boshqa markazga hech qachon ko'rinmaydi. Telefon raqamlari va pul summalari maxfiy.</p>
+  <div class="tw"><table>
+    <thead><tr><th>Rol</th><th>Ko'radi</th><th>Qila oladi</th></tr></thead>
+    <tbody>
+      <tr><td><b>Markaz egasi</b></td><td>Hamma narsa: guruhlar, o'quvchilar, to'lovlar, qarzdorlar, tuzatishlar tarixi, hisobotlar</td><td>Admin ishlari + o'chirish, hisobot, Excel, eslatma va qarz kunini sozlash</td></tr>
+      <tr><td><b>Admin</b></td><td>Guruhlar, o'quvchilar, to'lovlar, qarzdorlar</td><td>O'quvchi, guruh, to'lov qo'shish va tuzatish. O'chira olmaydi, hisobotni ko'rmaydi</td></tr>
+      <tr><td><b>Ota-ona</b></td><td>Faqat o'z farzandining qarzi, to'lov tarixi, keyingi to'lov sanasi</td><td>Eslatma olish, "Men to'laganman" deb e'tiroz yuborish</td></tr>
+      <tr><td><b>Platforma egasi</b></td><td>Barcha markazlar, obuna cheklari, statistika, xatolar</td><td>Markazni tasdiqlash, chekni tasdiqlash, bloklash</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<section id="birinchi">
+  <h2>Birinchi versiyada nimalar bo'ladi</h2>
+  <p class="sub">Birinchi versiya bitta og'riqni hal qiladi: kassa va qarz.</p>
+  <div class="grid g3">
+    <div class="card"><div class="num">1</div><h3>To'lov va qarz hisobi</h3><p>Guruhlar, o'quvchilar, chegirma, bir necha guruh, balans, to'lovni tuzatish tarixi, qidiruv (ism, telefon, guruh).</p></div>
+    <div class="card"><div class="num">2</div><h3>Qarzdorlar va ota-ona ko'rinishi</h3><p>Egaga qarzdorlar ro'yxati. Ota-onaga joriy qarz, tarix, "Men to'laganman" tugmasi.</p></div>
+    <div class="card"><div class="num">3</div><h3>Avtomatik eslatma</h3><p>Necha kun oldin va qanchada takrorlashni ega o'zi tanlaydi. Telegram limitlariga mos, takrorsiz.</p></div>
+  </div>
+  <p style="margin-top:18px"><b>Qo'shimcha himoya:</b> shubhali yozuvni ushlash (juda katta summa, 10 daqiqada takror to'lov), o'quvchi holatlari (faol, to'xtatgan, ketgan), Excel yuklab olish, kunlik zaxira nusxa, sinov tugagach "ko'rish rejimi" (ma'lumot o'chmaydi).</p>
+</section>
+
+<section id="keyin">
+  <h2>Keyingi imkoniyatlar: sizning fikringiz kerak</h2>
+  <p class="sub">Bular rejada bor, lekin tartibi hali qat'iy emas. Qaysi biri sizga birinchi kerak bo'lsa, shuni oldinga olamiz.</p>
+  <div class="grid g2">
+    <div class="card"><h3>Online qabulxona</h3><p>Kurslar katalogi, ariza qoldirish, holat (yangi, qo'ng'iroq qilindi, qabul qilindi), guruhga biriktirish, konversiya statistikasi.</p></div>
+    <div class="card"><h3>Davomat</h3><p>Ota-onaga "Farzandingiz bugun darsga kelmadi" xabari, o'zlashtirish va o'tilgan mavzular.</p></div>
+    <div class="card"><h3>Xarajatlar</h3><p>Ijara, maosh, kommunal: tushum va chiqim bir joyda.</p></div>
+    <div class="card"><h3>Xodimlar va o'qituvchilar</h3><p>Topshiriqlar, o'qituvchi davomati va maoshi, lavozim va vakolatlar.</p></div>
+    <div class="card"><h3>Kanal va ommaviy xabar</h3><p>Kanalga post rejalashtirish, o'quvchilarga e'lon.</p></div>
+    <div class="card"><h3>Click / Payme orqali to'lov</h3><p>Hozir to'lov qo'lda yoziladi; keyin avtomatik qabul qilish.</p></div>
+    <div class="card"><h3>Kunlik ritm</h3><p>Egaga ertalabgi brifing (bugungi darslar, qarzdorlar) va kechki hisobot, oylik Excel.</p></div>
+    <div class="card"><h3>Sayt (veb-panel)</h3><p>Kompyuterdan ishlash uchun: jadvallar, qidiruv, hisobot, ota-ona kabineti. Kirish Telegram yoki login-parol bilan.</p></div>
+  </div>
+</section>
+
+<section id="holat">
+  <h2>Hozirgi holat</h2>
+  <p class="sub">GitHub'dagi <code>ikromovjavohir/edubot</code> repozitoriysi bo'yicha, oxirgi o'zgarish 25.10.2026.</p>
+  <div class="honest" style="margin-bottom:20px"><b>Aniq aytamiz:</b> EduBot hali ishlaydigan mahsulot emas. Repozitoriyda kod yo'q, faqat tayyor reja va hujjatlar bor. Birinchi sprint hali boshlanmagan. Shuning uchun biz sizdan aynan hozir, qurishdan oldin fikr so'rayapmiz.</div>
+  <div class="tw"><table>
+    <thead><tr><th>Bosqich</th><th>Savol</th><th>Natija</th><th>Holat</th></tr></thead>
+    <tbody>
+      <tr><td><b>G'oya va qovurdoq</b></td><td>Kim uchun, qaysi muammo?</td><td>Auditoriya, rollar, qoidalar, xavflar aniqlangan</td><td><span class="pill p-done">Tayyor</span></td></tr>
+      <tr><td><b>Hujjatlar</b></td><td>Nima quramiz?</td><td>PRD, texnologiyalar, yo'l xaritasi, qarorlar jurnali, 9 sprint rejasi</td><td><span class="pill p-done">Tayyor</span></td></tr>
+      <tr><td>S1 · Kesim</td><td>Ishlaydimi?</td><td>Sinov botida to'lov yozish va qarz ko'rsatish</td><td><span class="pill p-todo">Boshlanmagan</span></td></tr>
+      <tr><td>S2 · Xotira</td><td>Eslab qoladimi?</td><td>Guruh, o'quvchi, chegirma, oylik hisob</td><td><span class="pill p-plan">Reja</span></td></tr>
+      <tr><td>S3 · Kirish</td><td>Kim kirdi?</td><td>Markaz so'rovi, admin va ota-ona ulanishi, rollar</td><td><span class="pill p-plan">Reja</span></td></tr>
+      <tr><td>S4 · Chuqurlik</td><td>Haqiqatda chidaydimi?</td><td>Kunlar bo'yicha hisob, balans, bitta xabar bilan to'lov, e'tiroz</td><td><span class="pill p-plan">Reja</span></td></tr>
+      <tr><td>S5 · Telegram</td><td>Qo'lda turadimi?</td><td>Avtomatik oylik va eslatma, serverda doim ishlash</td><td><span class="pill p-plan">Reja</span></td></tr>
+      <tr><td>S6 · Boshqaruv</td><td>Boshqarib bo'ladimi?</td><td>Obuna, cheklar, statistika, Excel, zaxira</td><td><span class="pill p-plan">Reja</span></td></tr>
+      <tr><td>S7–S9 · Sayt</td><td>Kompyuterda qulayroqmi?</td><td>API, panel, ota-ona kabineti (birinchi versiyadan keyin)</td><td><span class="pill p-plan">Reja</span></td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<section id="ishonch">
+  <h2>Nega biz buni uddalaymiz</h2>
+  <div class="grid g2">
+    <div class="card gain"><h3>Ishlab turgan o'xshash bot bor</h3><p>Shu jamoaning "Yordamchi" degan Telegram kotiba-boti biznes egalari uchun serverda 24/7 ishlaydi: qarz daftari, eslatma, hisobot, xodimlar, obuna va to'lov cheki tasdig'i. Taxminan 7 ta ega sinab ko'rmoqda. EduBot shu tajriba ustiga quriladi.</p></div>
+    <div class="card gain"><h3>Eng katta xavfni bilamiz</h3><p>Qarz noto'g'ri chiqsa, ishonch yo'qoladi. Shuning uchun hisob-kitob testlari majburiy, har qoida alohida tekshiriladi, raqamni kod hisoblaydi.</p></div>
+  </div>
+  <p style="margin-top:16px" class="note">Obuna narxi hali belgilanmagan. Qat'iy oylik narx yoki o'quvchilar soniga qarab bo'lishi sizning fikringizga bog'liq.</p>
+</section>
+
+<section id="savol">
+  <h2>Sizdan so'raymiz</h2>
+  <p class="sub">Suhbatda shu savollarga javob olsak, birinchi versiyani to'g'ri qura olamiz.</p>
+  <ol class="q">
+    <li>To'lovni hozir qanday yuritasiz (daftar, Excel, boshqa dastur) va eng ko'p vaqt qayerda ketadi?</li>
+    <li>Oyiga nechta o'quvchi va nechta guruh bor? To'lovni kim yig'adi?</li>
+    <li>Qarz oyning 1-kuni yoziladimi yoki o'quvchi kelgan sanadanmi? Oy o'rtasida kelganlar bilan nima qilasiz?</li>
+    <li>Chegirmani kim qo'yadi: faqat egasimi yoki admin ham?</li>
+    <li>Ota-onalarga eslatma yuborish ma'qulmi? Qancha oldin va necha marta?</li>
+    <li>Yuqoridagi keyingi imkoniyatlardan qaysi uchtasi sizga birinchi kerak (arizalar, davomat, xarajat, o'qituvchi maoshi, ommaviy xabar...)?</li>
+    <li>Sizga yana qaysi hisobot yoki Excel kerak? Ertalabki brifing foydali bo'ladimi?</li>
+    <li>Shunday xizmat uchun oyiga qancha to'lashga tayyorsiz? Qat'iy narx qulaymi yoki o'quvchilar soniga qarabmi?</li>
+    <li>Sinovda qatnashishga rozimisiz: 7 kun bepul, o'z ma'lumotingiz bilan?</li>
+  </ol>
+</section>
+
+</main>
+<footer><div class="wrap">EduBot · o'quv markazlar uchun Telegram kassa-bot · reja holati 25.10.2026</div></footer>
+</body>
+</html>
